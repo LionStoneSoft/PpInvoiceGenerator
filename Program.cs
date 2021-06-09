@@ -16,9 +16,17 @@ namespace PpInvoiceGenerator
             DbConnection newdb = new DbConnection();
             HtmlInvoiceGenerator generate = new HtmlInvoiceGenerator();
             InvoiceModel currentCustomer;
-            newdb.connect();
 
-            for (int i = 1; i < 40001; i++)
+            Console.WriteLine("Database Username: ");
+            string userName = Console.ReadLine();
+            Console.WriteLine("Database Password: ");
+            string passWord = Console.ReadLine();
+
+            newdb.connect(userName, passWord);
+            int customerCount = newdb.customerCount();
+            Console.WriteLine("Invoices being generated...");
+
+            for (int i = 1; i <= customerCount; i++)
             {
                 currentCustomer = newdb.customerObject(i);
                 string content = generate.generateTable(currentCustomer);
@@ -29,10 +37,9 @@ namespace PpInvoiceGenerator
                 }
             }
             newdb.disconnect();
-
-
             timePerParse.Stop();
             Console.WriteLine(timePerParse.ElapsedMilliseconds);
+            Console.WriteLine("Invoice generation complete.");
         }
     }
 }
